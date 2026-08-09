@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>es-kicad-lib — Parts Search</title>
+  <meta name="description" content="Search and filter the Electronics Source (es.co.th) parts catalogue behind the es-kicad-lib KiCad library.">
+  <link rel="stylesheet" href="search.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="https://github.com/BoonyakornTanrattanakorn/es-kicad-lib">ES<span>-kicad-lib</span></a>
+    <div class="search-box">
+      <input id="search-input" type="text" placeholder="Search part number, MPN, description… e.g. 0.1uF 0402" autocomplete="off">
+    </div>
+    <span id="as-of" class="as-of mono"></span>
+  </header>
+
+  <div class="layout">
+    <nav class="pane pane-categories">
+      <div class="pane-label">Category</div>
+      <div id="category-tree"></div>
+    </nav>
+
+    <main class="pane pane-results">
+      <div id="results-summary" class="results-summary"></div>
+      <div id="table-wrap" class="table-wrap">
+        <table class="results">
+          <thead>
+            <tr>
+              <th data-sort="es_pn" class="sorted">ES P/N</th>
+              <th data-sort="mfr">Mfr / MPN</th>
+              <th data-sort="pkg_case">Package</th>
+              <th data-sort="stock_total">Stock</th>
+              <th data-sort="price">Price</th>
+            </tr>
+          </thead>
+          <tbody id="results-tbody"></tbody>
+        </table>
+      </div>
+    </main>
+
+    <aside class="pane pane-filters" id="filter-pane">
+      <div class="loading-state">Loading…</div>
+    </aside>
+  </div>
+
+  <script src="search.js"></script>
+</body>
+</html>

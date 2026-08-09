@@ -11,6 +11,33 @@ Consumes `es-components.csv` / `es-parts.sqlite` published by
 scraping, this one only generates symbols/footprints/packages from
 already-published data.
 
+## Parts search
+
+`docs/` is a static, client-side parts search over the same catalogue,
+served via GitHub Pages at
+`https://boonyakorntanrattanakorn.github.io/es-kicad-lib/`. DigiKey-style
+three-pane layout: category tree, results table, and faceted filters
+(numeric ranges and checkboxes) built from each part's parametric spec
+table.
+
+- `docs/index.html` / `docs/search.css` / `docs/search.js` — the page.
+  No build step, no backend; everything runs in the browser against
+  static JSON.
+- `docs/data/index.json` + `docs/data/{category}.json` — one JSON file
+  per second-level category (e.g. `passive-components-resistors.json`),
+  generated from `es-parts.sqlite` by
+  [`escrape.export_search_json`](../es-parts-database/escrape/export_search_json.py)
+  in `es-parts-database`. Lazy-loaded per category so the browser never
+  downloads the full catalogue up front.
+- Regenerate after a new `es-parts.sqlite` is published:
+  ```
+  cd ../es-parts-database
+  python -m escrape.export_search_json --out ../es-kicad-lib/docs/data
+  ```
+  Commit the regenerated `docs/data/*.json` alongside the next release —
+  same cadence as the `metadata.json` version bump in
+  `generator/package.py`.
+
 ## Layout
 
 - `generator/package_tools.py` — ported verbatim from CDFER: `.zip`
