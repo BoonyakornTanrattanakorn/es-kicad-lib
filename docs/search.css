@@ -283,6 +283,19 @@ table.results tr:hover td { background: var(--bg-sunken); }
   display: flex;
   align-items: center;
   gap: 0.4rem;
+  margin-bottom: 0.6rem;
+}
+
+.facet-value-list {
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.facet-value-empty {
+  font-size: 0.76rem;
+  color: var(--ink-faint);
+  font-style: italic;
+  padding: 0.3rem 0;
 }
 .facet-range-inputs input {
   width: 0;

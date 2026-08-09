@@ -196,14 +196,35 @@
     return wrap;
   }
 
+  function rangeFilterState(key) {
+    const existing = state.activeFilters[key];
+    return existing && !(existing instanceof Set) ? existing : { selected: new Set(), narrow: null };
+  }
+
+  function countForRangeValue(key, raw) {
+    // count under all *other* active filters, same rationale as
+    // countForEnumValue: shows what a checkbox would yield without the
+    // user's own selection on this facet masking it.
+    const otherFilters = { ...state.activeFilters };
+    delete otherFilters[key];
+    return filterParts(state.categoryData.parts, otherFilters, state.query).filter(
+      (p) => p.specs_parsed[key] && p.specs_parsed[key].raw === raw
+    ).length;
+  }
+
   function renderRangeFacet(key, facet) {
     const wrap = document.createElement("div");
-    wrap.className = "facet-range-inputs";
-    const current = state.activeFilters[key] || [facet.min, facet.max];
+    const rf = rangeFilterState(key);
+    const [narrowLo, narrowHi] = rf.narrow || [facet.min, facet.max];
+
+    // min/max narrows which discrete values are listed below -- it is not
+    // itself an applied filter unless nothing is checked (see filterParts).
+    const rangeRow = document.createElement("div");
+    rangeRow.className = "facet-range-inputs";
 
     const minInput = document.createElement("input");
     minInput.type = "number";
-    minInput.value = trimNum(current[0]);
+    minInput.value = trimNum(narrowLo);
     minInput.placeholder = trimNum(facet.min);
 
     const dash = document.createElement("span");
@@ -212,27 +233,69 @@
 
     const maxInput = document.createElement("input");
     maxInput.type = "number";
-    maxInput.value = trimNum(current[1]);
+    maxInput.value = trimNum(narrowHi);
     maxInput.placeholder = trimNum(facet.max);
 
     const unit = document.createElement("span");
     unit.className = "facet-range-unit";
     unit.textContent = facet.unit || "";
 
-    function apply() {
+    function applyNarrow() {
       const lo = minInput.value === "" ? facet.min : parseFloat(minInput.value);
       const hi = maxInput.value === "" ? facet.max : parseFloat(maxInput.value);
-      if (lo <= facet.min && hi >= facet.max) delete state.activeFilters[key];
-      else state.activeFilters[key] = [lo, hi];
+      const narrow = lo <= facet.min && hi >= facet.max ? null : [lo, hi];
+      const next = { selected: rf.selected, narrow };
+      if (next.selected.size === 0 && !next.narrow) delete state.activeFilters[key];
+      else state.activeFilters[key] = next;
+      renderFilters();
       renderResults();
     }
-    minInput.addEventListener("change", apply);
-    maxInput.addEventListener("change", apply);
+    minInput.addEventListener("change", applyNarrow);
+    maxInput.addEventListener("change", applyNarrow);
 
-    wrap.appendChild(minInput);
-    wrap.appendChild(dash);
-    wrap.appendChild(maxInput);
-    wrap.appendChild(unit);
+    rangeRow.appendChild(minInput);
+    rangeRow.appendChild(dash);
+    rangeRow.appendChild(maxInput);
+    rangeRow.appendChild(unit);
+    wrap.appendChild(rangeRow);
+
+    const list = document.createElement("div");
+    list.className = "facet-value-list";
+    const visible = facet.values.filter((v) => v.value >= narrowLo && v.value <= narrowHi);
+    for (const { raw, value } of visible) {
+      const n = countForRangeValue(key, raw);
+      const opt = document.createElement("label");
+      opt.className = "facet-opt" + (n === 0 && !rf.selected.has(raw) ? " zero" : "");
+      const cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.checked = rf.selected.has(raw);
+      cb.addEventListener("change", () => {
+        if (cb.checked) rf.selected.add(raw);
+        else rf.selected.delete(raw);
+        const next = { selected: rf.selected, narrow: rf.narrow };
+        if (next.selected.size === 0 && !next.narrow) delete state.activeFilters[key];
+        else state.activeFilters[key] = next;
+        renderFilters();
+        renderResults();
+      });
+      opt.appendChild(cb);
+      const span = document.createElement("span");
+      span.textContent = raw;
+      opt.appendChild(span);
+      const countSpan = document.createElement("span");
+      countSpan.className = "n";
+      countSpan.textContent = n;
+      opt.appendChild(countSpan);
+      list.appendChild(opt);
+    }
+    if (visible.length === 0) {
+      const empty = document.createElement("div");
+      empty.className = "facet-value-empty";
+      empty.textContent = "No values in range.";
+      list.appendChild(empty);
+    }
+    wrap.appendChild(list);
+
     return wrap;
   }
 
@@ -286,9 +349,14 @@
         if (f instanceof Set) {
           if (!f.has(p.specs[key] || "")) return false;
         } else {
+          // range facet: { selected: Set(raw values) | null, narrow: [min, max] | null }
           const parsed = p.specs_parsed[key];
           const val = parsed ? parsed.value : NaN;
-          if (Number.isNaN(val) || val < f[0] || val > f[1]) return false;
+          if (f.selected && f.selected.size > 0) {
+            if (!f.selected.has(parsed ? parsed.raw : undefined)) return false;
+          } else if (f.narrow) {
+            if (Number.isNaN(val) || val < f.narrow[0] || val > f.narrow[1]) return false;
+          }
         }
       }
       return true;
