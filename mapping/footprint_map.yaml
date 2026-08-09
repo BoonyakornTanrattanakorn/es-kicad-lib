@@ -1,0 +1,137 @@
+# Route A footprint map (plan §3.2): pkg_case token (as it appears verbatim
+# in ES's Package/Case column) + ref_designator -> a KiCad stock LIB_ID.
+# Every LIB_ID below was checked against a real KiCad 10 install
+# (share/kicad/footprints/*.pretty, 2026-08-09) before being added here —
+# none are guessed.
+#
+# Only common, unambiguous packages belong here. Packages needing datasheet
+# body-width verification (plan §3.2's SOIC-8 wide-body trap) or with no
+# stock equivalent (e.g. "4527" power resistors) are Route B candidates —
+# leave them out of this file rather than guess a footprint that might be
+# wrong; an unresolved symbol is safer than a mismatched one (plan §3.5).
+#
+# match.pkg_case is matched verbatim against the parts.pkg_case column.
+# match.ref restricts the rule to a reference designator (R/C/D/...) since
+# the same package token can mean different things for different parts.
+rules:
+  # --- Resistors (Resistor_SMD.pretty, verified present) ---
+  - match: {pkg_case: "0201 (0603)", ref: R}
+    footprint: "Resistor_SMD:R_0201_0603Metric"
+  - match: {pkg_case: "0402 (1005)", ref: R}
+    footprint: "Resistor_SMD:R_0402_1005Metric"
+  - match: {pkg_case: "0603 (1608)", ref: R}
+    footprint: "Resistor_SMD:R_0603_1608Metric"
+  - match: {pkg_case: "0805 (2012)", ref: R}
+    footprint: "Resistor_SMD:R_0805_2012Metric"
+  - match: {pkg_case: "1206 (3216)", ref: R}
+    footprint: "Resistor_SMD:R_1206_3216Metric"
+  - match: {pkg_case: "1210 (3225)", ref: R}
+    footprint: "Resistor_SMD:R_1210_3225Metric"
+  - match: {pkg_case: "2816 (7142)", ref: R}
+    footprint: "Resistor_SMD:R_2816_7142Metric"
+
+  # --- Capacitors (Capacitor_SMD.pretty, verified present) ---
+  - match: {pkg_case: "0402 (1005)", ref: C}
+    footprint: "Capacitor_SMD:C_0402_1005Metric"
+  - match: {pkg_case: "0603 (1608)", ref: C}
+    footprint: "Capacitor_SMD:C_0603_1608Metric"
+  - match: {pkg_case: "0805 (2012)", ref: C}
+    footprint: "Capacitor_SMD:C_0805_2012Metric"
+  - match: {pkg_case: "1206 (3216)", ref: C}
+    footprint: "Capacitor_SMD:C_1206_3216Metric"
+  - match: {pkg_case: "1210 (3225)", ref: C}
+    footprint: "Capacitor_SMD:C_1210_3225Metric"
+
+  # --- Diodes (Diode_THT.pretty / Diode_SMD.pretty, verified present).
+  # DO-35/DO-41 have several lead-pitch variants in KiCad's library; picked
+  # P7.62mm_Horizontal as the common default for axial THT diodes -- flag
+  # for review if a part actually needs a different forming.
+  - match: {pkg_case: "DO-35 (DO-204AH)", ref: D}
+    footprint: "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal"
+  - match: {pkg_case: "DO-41 (DO-204AL)", ref: D}
+    footprint: "Diode_THT:D_DO-41_SOD81_P7.62mm_Horizontal"
+  - match: {pkg_case: "SOD80/MINIMELF", ref: D}
+    footprint: "Diode_SMD:D_MiniMELF"
+  - match: {pkg_case: "SOD-123", ref: D}
+    footprint: "Diode_SMD:D_SOD-123"
+
+  # --- Transistors / small SMD packages (Package_TO_SOT_SMD.pretty,
+  # verified present). Kept even though no T1 sample hit them yet, since
+  # they're common enough across 024011/024014 to include proactively.
+  - match: {pkg_case: "SOT-23", ref: Q}
+    footprint: "Package_TO_SOT_SMD:SOT-23"
+  - match: {pkg_case: "SOT-23-3", ref: Q}
+    footprint: "Package_TO_SOT_SMD:SOT-23"
+  - match: {pkg_case: "SOT-89", ref: Q}
+    footprint: "Package_TO_SOT_SMD:SOT-89-3"
+  - match: {pkg_case: "SOT-89-3", ref: Q}
+    footprint: "Package_TO_SOT_SMD:SOT-89-3"
+
+  # --- Added 2026-08-09 after the first full-catalogue run (5,066 parts)
+  # showed these as the highest-frequency unresolved tokens. Exact
+  # pkg_case strings pulled from the real parts.pkg_case column, not
+  # guessed. Several tokens are shared by both diodes (D) and
+  # transistors/FETs (Q) on ES, so each gets a ref-scoped rule per side.
+  - match: {pkg_case: "SOT-23-3 (SOT-346)", ref: D}
+    footprint: "Package_TO_SOT_SMD:SOT-23"
+  - match: {pkg_case: "SOT-23-3 (SOT-346)", ref: Q}
+    footprint: "Package_TO_SOT_SMD:SOT-23"
+  - match: {pkg_case: "SOT-23-5", ref: Q}
+    footprint: "Package_TO_SOT_SMD:SOT-23-5"
+  - match: {pkg_case: "SOT-23-6", ref: D}
+    footprint: "Package_TO_SOT_SMD:SOT-23-6"
+  - match: {pkg_case: "SOT-23-6", ref: Q}
+    footprint: "Package_TO_SOT_SMD:SOT-23-6"
+
+  - match: {pkg_case: "TO-92", ref: Q}
+    footprint: "Package_TO_SOT_THT:TO-92"
+  - match: {pkg_case: "TO-92-3", ref: Q}
+    footprint: "Package_TO_SOT_THT:TO-92"
+  - match: {pkg_case: "TO-92L", ref: Q}
+    footprint: "Package_TO_SOT_THT:TO-92L"
+
+  - match: {pkg_case: "TO-220-2", ref: D}
+    footprint: "Package_TO_SOT_THT:TO-220-2_Vertical"
+  - match: {pkg_case: "TO-220-3", ref: D}
+    footprint: "Package_TO_SOT_THT:TO-220-3_Vertical"
+  - match: {pkg_case: "TO-220-3", ref: Q}
+    footprint: "Package_TO_SOT_THT:TO-220-3_Vertical"
+  - match: {pkg_case: "TO-220F-2", ref: D}
+    footprint: "Package_TO_SOT_THT:TO-220F-2_Vertical"
+  - match: {pkg_case: "TO-220F-3", ref: D}
+    footprint: "Package_TO_SOT_THT:TO-220F-3_Vertical"
+  - match: {pkg_case: "TO-220F-3", ref: Q}
+    footprint: "Package_TO_SOT_THT:TO-220F-3_Vertical"
+  - match: {pkg_case: "TO-247-2", ref: D}
+    footprint: "Package_TO_SOT_THT:TO-247-2_Vertical"
+  - match: {pkg_case: "TO-247-3", ref: D}
+    footprint: "Package_TO_SOT_THT:TO-247-3_Vertical"
+  - match: {pkg_case: "TO-247-3", ref: Q}
+    footprint: "Package_TO_SOT_THT:TO-247-3_Vertical"
+  - match: {pkg_case: "TO-264-3", ref: Q}
+    footprint: "Package_TO_SOT_THT:TO-264-3_Vertical"
+
+  - match: {pkg_case: "DPAK (TO-252)", ref: D}
+    footprint: "Package_TO_SOT_SMD:TO-252-2"
+  - match: {pkg_case: "DPAK (TO-252)", ref: Q}
+    footprint: "Package_TO_SOT_SMD:TO-252-2"
+
+  # --- Diode rectifier packages (Diode_SMD.pretty, verified present) ---
+  - match: {pkg_case: "DO-214AA (SMB)", ref: D}
+    footprint: "Diode_SMD:D_SMB"
+  - match: {pkg_case: "DO-214AB (SMC)", ref: D}
+    footprint: "Diode_SMD:D_SMC"
+  - match: {pkg_case: "DO-214AC (SMA)", ref: D}
+    footprint: "Diode_SMD:D_SMA"
+  - match: {pkg_case: "SOD-123F", ref: D}
+    footprint: "Diode_SMD:D_SOD-123F"
+
+  # --- THT round LED (LED_THT.pretty, verified present). LED Discrete
+  # (catc 015016) rows use "Round <diameter>,<lens style>" tokens; only the
+  # diameter maps unambiguously to a stock footprint, lens style/color does
+  # not change the mechanical footprint. ref D matches the LED symbol's
+  # ref_designator (autoLibrarySymbols.py's Diodes mode).
+  - match: {pkg_case: "Round 3mm,T-1", ref: D}
+    footprint: "LED_THT:LED_D3.0mm"
+  - match: {pkg_case: "Round 5mm,T-1 3/4", ref: D}
+    footprint: "LED_THT:LED_D5.0mm"

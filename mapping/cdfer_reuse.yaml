@@ -1,0 +1,241 @@
+# Curated CDFER symbol/footprint reuse table (plan §2.1 T2, built 2026-08-09).
+#
+# Source: CDFER/JLCPCB-Kicad-Library hand-drawn symbols in
+# symbols/JLCPCB-{Analog,ICs,Interface}.kicad_sym (MIT licensed). A part's
+# pinout doesn't change because a different distributor sells it, so the
+# symbol geometry (pin names/numbers/positions) and SOIC/SOP footprint
+# geometry are reused as-is; only the sourcing properties (ES_PN, price,
+# stock, ...) are re-pointed at the matching ES row via handmade_symbols.py.
+#
+# Every es_pn below was confirmed live against es.co.th on 2026-08-09 with
+# a matching package (SOIC/SOP family matching the CDFER footprint's pin
+# count, or PDIP mapped to KiCad's stock Package_DIP footprint instead of
+# the CDFER geometry). Rows with no package-compatible ES match were
+# dropped rather than guessed -- see the conversation for the full search
+# results, including MPN families with zero ES hits (LMV321, MCP6002,
+# CD4051/4052, 74LVC4245, PCF8563, NE555, ADUM1201, SN65HVD230, TJA1050,
+# SP3232, SP3485, SP485E, CP2102, HT1621, STM32F030/F103C8,
+# STM8S003F3/S105, AT24C256, M24C64/C02, LTV-217) and STM8S003 (ES has only
+# the unrelated K3/LQFP-32 variant, not the F3/TSSOP-20 CDFER drew).
+#
+# footprint_source: "cdfer" means copy the .kicad_mod verbatim from
+# footprints/JLCPCB.pretty/{cdfer_footprint}.kicad_mod into
+# footprints/ES.pretty/ (Route B). "kicad_stock" means point straight at a
+# KiCad-installed library (Route A), no file copy needed.
+
+parts:
+  - cdfer_symbol: "Comparator, LM393DR2G"
+    cdfer_footprint: "SOIC-8_L5.0-W4.0-P1.27-LS6.0-BL"
+    ref_designator: U
+    variants:
+      - es_pn: "0083-0221-6"
+        footprint_source: cdfer
+      - es_pn: "0235-0159-9"
+        footprint_source: cdfer
+      - es_pn: "0235-0594-2"
+        footprint_source: cdfer
+      - es_pn: "0086-0700-1"   # PDIP-8
+        footprint_source: kicad_stock
+        footprint: "Package_DIP:DIP-8_W7.62mm"
+      - es_pn: "0339-0057-8"   # PDIP-8
+        footprint_source: kicad_stock
+        footprint: "Package_DIP:DIP-8_W7.62mm"
+
+  - cdfer_symbol: "Op-Amp, LM2904DR2G"
+    cdfer_footprint: "SOIC-8_L4.9-W3.9-P1.27-LS6.0-BL"
+    ref_designator: U
+    variants: []  # ES only has SOP-8/TSSOP-B8 variants, not SOIC-8 -- Route B skipped pending a matching footprint
+
+  - cdfer_symbol: "Op-Amp, LM324DT"
+    cdfer_footprint: "SOIC-14_L8.7-W3.9-P1.27-LS6.0-BL"
+    ref_designator: U
+    variants:
+      - es_pn: "0083-0183-1"
+        footprint_source: cdfer
+      - es_pn: "0235-0072-1"
+        footprint_source: cdfer
+      - es_pn: "0086-0707-2"   # PDIP-14
+        footprint_source: kicad_stock
+        footprint: "Package_DIP:DIP-14_W7.62mm"
+
+  - cdfer_symbol: "Op-Amp, LM358DR2G"
+    cdfer_footprint: "SOIC-8_L5.0-W4.0-P1.27-LS6.0-BL"
+    ref_designator: U
+    variants:
+      - es_pn: "0078-0318-5"
+        footprint_source: cdfer
+      - es_pn: "0083-0184-4"
+        footprint_source: cdfer
+      - es_pn: "0086-0301-4"
+        footprint_source: cdfer
+      - es_pn: "0078-0290-8"   # PDIP-8
+        footprint_source: kicad_stock
+        footprint: "Package_DIP:DIP-8_W7.62mm"
+      - es_pn: "0086-0723-8"   # PDIP-8
+        footprint_source: kicad_stock
+        footprint: "Package_DIP:DIP-8_W7.62mm"
+      - es_pn: "0339-0004-7"   # PDIP-8
+        footprint_source: kicad_stock
+        footprint: "Package_DIP:DIP-8_W7.62mm"
+
+  - cdfer_symbol: "Op-Amp, NE5532DR"
+    cdfer_footprint: "SOIC-8_L4.9-W3.9-P1.27-LS6.0-BL"
+    ref_designator: U
+    variants:
+      - es_pn: "0086-0280-8"   # PDIP-8 (no SOIC-8 hit found on ES for NE5532)
+        footprint_source: kicad_stock
+        footprint: "Package_DIP:DIP-8_W7.62mm"
+
+  - cdfer_symbol: "Op-Amp, OP07CDR"
+    cdfer_footprint: "SOIC-8_L4.9-W3.9-P1.27-LS6.0-BL"
+    ref_designator: U
+    variants:
+      - es_pn: "0086-0543-6"
+        footprint_source: cdfer
+      - es_pn: "0086-0074-6"   # PDIP-8
+        footprint_source: kicad_stock
+        footprint: "Package_DIP:DIP-8_W7.62mm"
+      - es_pn: "0339-0101-5"   # PDIP-8
+        footprint_source: kicad_stock
+        footprint: "Package_DIP:DIP-8_W7.62mm"
+
+  - cdfer_symbol: "Op-Amp, TL072CDT"
+    cdfer_footprint: "SOIC-8_L5.0-W4.0-P1.27-LS6.0-BL"
+    ref_designator: U
+    variants:
+      - es_pn: "0086-0493-1"
+        footprint_source: cdfer
+      - es_pn: "0086-0159-8"   # PDIP-8
+        footprint_source: kicad_stock
+        footprint: "Package_DIP:DIP-8_W7.62mm"
+
+  - cdfer_symbol: "Gate, AND, 4 Channel, 74HC08D,653"
+    cdfer_footprint: "SOIC-14_L8.7-W3.9-P1.27-LS6.0-BL"
+    ref_designator: U
+    variants:
+      - es_pn: "0086-0307-2"
+        footprint_source: cdfer
+      - es_pn: "0086-0083-7"   # PDIP-14
+        footprint_source: kicad_stock
+        footprint: "Package_DIP:DIP-14_W7.62mm"
+
+  - cdfer_symbol: "Inverter, 6 Channel, 74HC04D,653"
+    cdfer_footprint: "SOIC-14_L8.7-W3.9-P1.27-LS6.0-BL"
+    ref_designator: U
+    variants:
+      - es_pn: "0086-0231-1"
+        footprint_source: cdfer
+      - es_pn: "0086-0081-1"   # PDIP-14
+        footprint_source: kicad_stock
+        footprint: "Package_DIP:DIP-14_W7.62mm"
+
+  - cdfer_symbol: "Inverter, 6 Channel, 74HC14D,653"
+    cdfer_footprint: "SOIC-14_L8.7-W3.9-P1.27-LS6.0-BL"
+    ref_designator: U
+    variants:
+      - es_pn: "0086-0332-9"
+        footprint_source: cdfer
+      - es_pn: "0086-0090-2"   # PDIP-14
+        footprint_source: kicad_stock
+        footprint: "Package_DIP:DIP-14_W7.62mm"
+
+  - cdfer_symbol: "Level Shifter, 8 Channel, 74HC245D,653"
+    cdfer_footprint: "SOIC-20_L13.0-W7.6-P1.27-LS10.3-BL"
+    ref_designator: U
+    variants:
+      - es_pn: "0086-0224-6"
+        footprint_source: cdfer
+      - es_pn: "0086-0291-5"   # PDIP-20
+        footprint_source: kicad_stock
+        footprint: "Package_DIP:DIP-20_W7.62mm"
+      # 0086-0808-1 is TSSOP-20, neither cdfer SOIC-20 nor DIP-20 -- skipped
+
+  - cdfer_symbol: "Real Time Clock, SPI, 0.3uA, DS1302ZN+"
+    cdfer_footprint: "SOIC-8_L4.9-W3.9-P1.27-LS6.0-BL"
+    ref_designator: U
+    variants:
+      - es_pn: "0067-0086-7"
+        footprint_source: cdfer
+      - es_pn: "0126-0180-6"
+        footprint_source: cdfer
+      - es_pn: "0067-0060-1"   # PDIP-8
+        footprint_source: kicad_stock
+        footprint: "Package_DIP:DIP-8_W7.62mm"
+
+  - cdfer_symbol: "Shift Register, 1 In, 8 Out, 74HC595D,118"
+    cdfer_footprint: "SOIC-16_L9.9-W3.9-P1.27-LS6.0-BL"
+    ref_designator: U
+    variants:
+      - es_pn: "0235-0315-1"
+        footprint_source: cdfer
+      - es_pn: "0339-0102-7"   # SOP-16, treated as SOIC-16-equivalent pinout/pitch
+        footprint_source: cdfer
+      - es_pn: "0086-0694-4"   # PDIP-16
+        footprint_source: kicad_stock
+        footprint: "Package_DIP:DIP-16_W7.62mm"
+      - es_pn: "0339-0104-1"   # PDIP-16
+        footprint_source: kicad_stock
+        footprint: "Package_DIP:DIP-16_W7.62mm"
+
+  - cdfer_symbol: "Shift Register, 8 In, 1 Out, 74HC165D,653"
+    cdfer_footprint: "SOIC-16_L9.9-W3.9-P1.27-LS6.0-BL"
+    ref_designator: U
+    variants:
+      - es_pn: "0086-0209-3"
+        footprint_source: cdfer
+      - es_pn: "0086-0093-1"   # PDIP-16
+        footprint_source: kicad_stock
+        footprint: "Package_DIP:DIP-16_W7.62mm"
+
+  - cdfer_symbol: "Transceiver, RS232, MAX232ESE"
+    cdfer_footprint: "SOIC-16_L9.9-W3.9-P1.27-LS6.0-BL"
+    ref_designator: U
+    variants:
+      - es_pn: "0126-0046-1"   # SOIC-16-NARROW
+        footprint_source: cdfer
+      - es_pn: "0339-0030-8"   # SOP-16
+        footprint_source: cdfer
+      - es_pn: "0126-0047-4"   # PDIP-16
+        footprint_source: kicad_stock
+        footprint: "Package_DIP:DIP-16_W7.62mm"
+      - es_pn: "0223-0033-6"   # PDIP-16
+        footprint_source: kicad_stock
+        footprint: "Package_DIP:DIP-16_W7.62mm"
+      - es_pn: "0339-0092-1"   # PDIP-16
+        footprint_source: kicad_stock
+        footprint: "Package_DIP:DIP-16_W7.62mm"
+      # 0126-0050-7 SOIC-16-WIDE skipped: body width mismatch with narrow footprint (plan §3.2 trap)
+
+  - cdfer_symbol: "Transceiver, RS485/422, 10Mbps, SN75176BDR"
+    cdfer_footprint: "SOIC-8_L5.0-W4.0-P1.27-LS6.0-BL"
+    ref_designator: U
+    variants:
+      - es_pn: "0086-0274-6"
+        footprint_source: cdfer
+      - es_pn: "0086-0152-7"   # PDIP-8
+        footprint_source: kicad_stock
+        footprint: "Package_DIP:DIP-8_W7.62mm"
+
+  - cdfer_symbol: "ATmega328P-AU"
+    cdfer_footprint: "TQFP-32_7x7mm_P0.8mm"
+    ref_designator: U
+    variants:
+      - es_pn: "0065-0323-5"
+        footprint_source: cdfer
+      - es_pn: "0035-2551-8"
+        footprint_source: cdfer
+      - es_pn: "1522-0037-8"
+        footprint_source: cdfer
+      # 0035-2577-6 is QFN-32 (ATMEGA328PB, different die/package) -- skipped
+      # 0065-0313-1 is PDIP-28, different pin count from TQFP-32 -- skipped
+
+  - cdfer_symbol: "16MByte, SPI"
+    cdfer_footprint: "SOIC-8_L5.3-W5.3-P1.27-LS8.0-BL"
+    ref_designator: U
+    variants:
+      - es_pn: "0088-0021-2"   # SOIC-8 208-mil, matches cdfer's wide W25Q128 footprint
+        footprint_source: cdfer
+      - es_pn: "0088-0025-1"
+        footprint_source: cdfer
+      - es_pn: "0088-0027-4"
+        footprint_source: cdfer

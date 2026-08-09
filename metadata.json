@@ -1,0 +1,25 @@
+{
+    "$schema": "https://go.kicad.org/pcm/schemas/v1",
+    "name": "Electronics Source (es.co.th) Parts Library",
+    "description": "Symbols, footprints, 3D models, and sourcing fields (ES P/N, price, stock) for Electronics Source (es.co.th) parts.",
+    "description_full": "A KiCad library of Electronics Source (es.co.th) parts. Symbols carry ES P/N, ES_URL, list price (THB, VAT-exclusive), and per-warehouse stock with a Stock_Date so freshness is always legible. Auto-generated for passives and discretes; hand-drawn and stock-patched for ICs, connectors, and modules. See the project README for scope and exclusions. Prices are list, VAT-exclusive, and dated at build time -- not live.",
+    "identifier": "com.github.es-kicad-lib",
+    "type": "library",
+    "author": {
+        "name": "es-kicad-lib contributors",
+        "contact": {
+            "web": "https://github.com/REPLACE_ME/es-kicad-lib"
+        }
+    },
+    "license": "MIT",
+    "resources": {
+        "homepage": "https://github.com/REPLACE_ME/es-kicad-lib"
+    },
+    "versions": [
+        {
+            "version": "2026.08.09",
+            "status": "stable",
+            "kicad_version": "8.0"
+        }
+    ]
+}
