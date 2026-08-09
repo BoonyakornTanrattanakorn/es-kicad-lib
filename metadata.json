@@ -8,12 +8,12 @@
     "author": {
         "name": "es-kicad-lib contributors",
         "contact": {
-            "web": "https://github.com/REPLACE_ME/es-kicad-lib"
+            "web": "https://github.com/BoonyakornTanrattanakorn/es-kicad-lib"
         }
     },
     "license": "MIT",
     "resources": {
-        "homepage": "https://github.com/REPLACE_ME/es-kicad-lib"
+        "homepage": "https://github.com/BoonyakornTanrattanakorn/es-kicad-lib"
     },
     "versions": [
         {
