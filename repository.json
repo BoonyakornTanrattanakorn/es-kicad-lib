@@ -1,0 +1,19 @@
+{
+    "$schema": "https://go.kicad.org/pcm/schemas/v1",
+    "maintainer": {
+        "name": "es-kicad-lib contributors",
+        "contact": {
+            "web": "https://github.com/BoonyakornTanrattanakorn/es-kicad-lib"
+        }
+    },
+    "name": "Electronics Source (es.co.th) KiCad Library Repository",
+    "packages": {
+        "url": "https://raw.githubusercontent.com/BoonyakornTanrattanakorn/es-kicad-lib/master/packages.json",
+        "sha256": "a2d3c878647c64485497f98b0c3e4a5704b33de2421c86e0b116c761fceb9018",
+        "update_timestamp": 1786285547,
+        "update_time_utc": "2026-08-09 14:25:47"
+    },
+    "resources": {
+        "homepage": "https://github.com/BoonyakornTanrattanakorn/es-kicad-lib"
+    }
+}

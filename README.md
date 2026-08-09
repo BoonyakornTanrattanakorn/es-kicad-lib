@@ -70,6 +70,39 @@ already-published data.
   "Reused" section for the safety rationale and match-verification
   process. One-shot tool, not part of the nightly pipeline.
 
+## Installing
+
+### Option A: Add as a PCM repository (recommended)
+
+1. In KiCad, open **Plugin and Content Manager** (puzzle-piece icon on the
+   main toolbar).
+2. Click the gear icon → **Manage Repositories** → **Add**.
+3. Enter this URL:
+   ```
+   https://raw.githubusercontent.com/BoonyakornTanrattanakorn/es-kicad-lib/master/repository.json
+   ```
+4. Select the "Electronics Source (es.co.th) Parts Library" package under
+   the new repository and click **Install**.
+
+`repository.json` and `packages.json` are checked into this repo's root
+and served via `raw.githubusercontent.com`, so no separate hosting is
+needed. **After cutting a new release**, `packages.json`'s `download_url`/
+`download_sha256`/`download_size` must be updated to match the new
+release asset, and `repository.json`'s `packages.sha256` /
+`update_timestamp` must be recomputed against the new `packages.json` —
+`generator/package.py` does not currently automate this (plan §4.1).
+
+### Option B: Install from a release zip manually
+
+1. Download the latest `es-kicad-lib-*.zip` from the
+   [Releases page](https://github.com/BoonyakornTanrattanakorn/es-kicad-lib/releases).
+2. In KiCad, open **Plugin and Content Manager**, click **Install from
+   File**, and select the downloaded zip.
+3. Enable the library and restart KiCad if prompted.
+
+Symbols, footprints, and 3D models are then available under the `ES`
+prefix in the symbol/footprint choosers.
+
 ## Running
 
 ```
