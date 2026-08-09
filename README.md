@@ -11,14 +11,51 @@ Consumes `es-components.csv` / `es-parts.sqlite` published by
 scraping, this one only generates symbols/footprints/packages from
 already-published data.
 
+## Installing
+
+### Option A: Add as a PCM repository (recommended)
+
+1. In KiCad, open **Plugin and Content Manager** (puzzle-piece icon on the
+   main toolbar).
+2. Click the gear icon → **Manage Repositories** → **Add**.
+3. Enter this URL:
+   ```
+   https://raw.githubusercontent.com/BoonyakornTanrattanakorn/es-kicad-lib/master/repository.json
+   ```
+4. Select the "Electronics Source (es.co.th) Parts Library" package under
+   the new repository and click **Install**.
+
+`repository.json` and `packages.json` are checked into this repo's root
+and served via `raw.githubusercontent.com`, so no separate hosting is
+needed. **After cutting a new release**, `packages.json`'s `download_url`/
+`download_sha256`/`download_size` must be updated to match the new
+release asset, and `repository.json`'s `packages.sha256` /
+`update_timestamp` must be recomputed against the new `packages.json` —
+`generator/package.py` does not currently automate this (plan §4.1).
+
+### Option B: Install from a release zip manually
+
+1. Download the latest `es-kicad-lib-*.zip` from the
+   [Releases page](https://github.com/BoonyakornTanrattanakorn/es-kicad-lib/releases).
+2. In KiCad, open **Plugin and Content Manager**, click **Install from
+   File**, and select the downloaded zip.
+3. Enable the library and restart KiCad if prompted.
+
+Symbols, footprints, and 3D models are then available under the `ES`
+prefix in the symbol/footprint choosers.
+
 ## Parts search
 
 `docs/` is a static, client-side parts search over the same catalogue,
 served via GitHub Pages at
 `https://boonyakorntanrattanakorn.github.io/es-kicad-lib/`. DigiKey-style
 three-pane layout: category tree, results table, and faceted filters
-(numeric ranges and checkboxes) built from each part's parametric spec
-table.
+built from each part's parametric spec table. Categorical specs
+(Package/Case, Dielectric, ...) get a plain checkbox list; numeric specs
+(Resistance, Capacitance, Tolerance, ...) get a checkbox list of the
+actual discrete values present *plus* a min/max box that narrows which
+of those checkboxes are shown — same interaction DigiKey uses for its
+parametric filters.
 
 - `docs/index.html` / `docs/search.css` / `docs/search.js` — the page.
   No build step, no backend; everything runs in the browser against
@@ -96,39 +133,6 @@ table.
   for ES catalogue rows with a matching MPN and package. See PORTING.md's
   "Reused" section for the safety rationale and match-verification
   process. One-shot tool, not part of the nightly pipeline.
-
-## Installing
-
-### Option A: Add as a PCM repository (recommended)
-
-1. In KiCad, open **Plugin and Content Manager** (puzzle-piece icon on the
-   main toolbar).
-2. Click the gear icon → **Manage Repositories** → **Add**.
-3. Enter this URL:
-   ```
-   https://raw.githubusercontent.com/BoonyakornTanrattanakorn/es-kicad-lib/master/repository.json
-   ```
-4. Select the "Electronics Source (es.co.th) Parts Library" package under
-   the new repository and click **Install**.
-
-`repository.json` and `packages.json` are checked into this repo's root
-and served via `raw.githubusercontent.com`, so no separate hosting is
-needed. **After cutting a new release**, `packages.json`'s `download_url`/
-`download_sha256`/`download_size` must be updated to match the new
-release asset, and `repository.json`'s `packages.sha256` /
-`update_timestamp` must be recomputed against the new `packages.json` —
-`generator/package.py` does not currently automate this (plan §4.1).
-
-### Option B: Install from a release zip manually
-
-1. Download the latest `es-kicad-lib-*.zip` from the
-   [Releases page](https://github.com/BoonyakornTanrattanakorn/es-kicad-lib/releases).
-2. In KiCad, open **Plugin and Content Manager**, click **Install from
-   File**, and select the downloaded zip.
-3. Enable the library and restart KiCad if prompted.
-
-Symbols, footprints, and 3D models are then available under the `ES`
-prefix in the symbol/footprint choosers.
 
 ## Running
 
