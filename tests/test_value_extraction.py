@@ -50,12 +50,24 @@ def test_extract_transistor_secondary_mode_pnp_from_polarity():
     assert extract_transistor_secondary_mode("024011", {"Polarity": "PNP"}) == "PNP"
 
 
+def test_extract_transistor_secondary_mode_pnp_from_transistor_type():
+    assert extract_transistor_secondary_mode("024011", {"Transistor Type": "PNP-TRANSISTOR"}) == "PNP"
+
+
 def test_extract_transistor_secondary_mode_mosfet_nmos_default():
     assert extract_transistor_secondary_mode("024014", {}) == "NMOS"
 
 
 def test_extract_transistor_secondary_mode_mosfet_pmos():
     assert extract_transistor_secondary_mode("024014", {"Channel Type": "P-Channel"}) == "PMOS"
+
+
+def test_extract_transistor_secondary_mode_mosfet_pmos_from_fet_type():
+    assert extract_transistor_secondary_mode("024014", {"FET Type": "P-channel"}) == "PMOS"
+
+
+def test_extract_transistor_secondary_mode_mosfet_nmos_from_fet_type():
+    assert extract_transistor_secondary_mode("024014", {"FET Type": "N-channel"}) == "NMOS"
 
 
 def test_extract_inductor_ferrite_vs_plain():

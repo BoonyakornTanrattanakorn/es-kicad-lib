@@ -69,17 +69,19 @@ def extract_led_value_and_color(specs: dict) -> tuple[str, str]:
 
 
 def extract_transistor_secondary_mode(catc: str, specs: dict) -> Optional[str]:
-    """catc 024011 (Transistors) is NPN/PNP; 024014 (FETs & MOSFETs) is
-    NMOS/PMOS. Distinguished by the 'Polarity'/'Transistor Type' column
-    rather than joint-count heuristics (CDFER used pin count + package
-    since JLCPCB's source data has no polarity column; ES's does).
+    """catc 024011 (Transistors) is NPN/PNP, distinguished by the
+    'Transistor Type' column; 024014 (FETs & MOSFETs) is NMOS/PMOS,
+    distinguished by the 'FET Type' column. Column-driven rather than
+    joint-count heuristics (CDFER used pin count + package since
+    JLCPCB's source data has no polarity column; ES's does).
     """
-    polarity = (_first(specs, "Polarity", "Transistor Type", "Channel Type") or "").upper()
     if catc == "024011":
+        polarity = (_first(specs, "Transistor Type", "Polarity") or "").upper()
         if "PNP" in polarity:
             return "PNP"
         return "NPN"
     if catc == "024014":
+        polarity = (_first(specs, "FET Type", "Channel Type", "Polarity") or "").upper()
         if "P-CHANNEL" in polarity or "PMOS" in polarity or polarity == "P":
             return "PMOS"
         return "NMOS"
