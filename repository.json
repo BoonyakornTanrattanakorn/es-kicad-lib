@@ -9,7 +9,7 @@
     "name": "Electronics Source (es.co.th) KiCad Library Repository",
     "packages": {
         "url": "https://raw.githubusercontent.com/BoonyakornTanrattanakorn/es-kicad-lib/master/packages.json",
-        "sha256": "ec11ea72ce0193a7bdd975d8fd3473a06fc6ee1b3e3b3e2ed96aa03425550436",
+        "sha256": "ef4e4e21b2beda186a8e471aaae534aecb22802bf42fb6bb8e58ecce08fd7085",
         "update_timestamp": 1786325595,
         "update_time_utc": "2026-08-10 01:33:15"
     }
