@@ -6,6 +6,7 @@
     slug: null,           // currently loaded category slug
     categoryData: null,   // full data/{slug}.json contents for the loaded category
     activeFilters: {},    // { facetKey: Set(values) } for enum facets, { facetKey: [min,max] } for range
+    columns: [],           // base columns + one per facet key, rebuilt on category change
     sortKey: "es_pn",
     sortDir: 1,
     query: "",
@@ -14,6 +15,7 @@
   const els = {
     tree: document.getElementById("category-tree"),
     filters: document.getElementById("filter-pane"),
+    thead: document.getElementById("results-thead"),
     tbody: document.getElementById("results-tbody"),
     summary: document.getElementById("results-summary"),
     asOf: document.getElementById("as-of"),
@@ -21,13 +23,23 @@
     tableWrap: document.getElementById("table-wrap"),
   };
 
-  const COLUMNS = [
+  // Base columns present for every category, rendered before the
+  // category's own spec/facet columns (one column per facet key, so every
+  // filterable parameter is also visible in the table).
+  const BASE_COLUMNS = [
+    { key: "pkg_thumb", label: "Pic" },
     { key: "es_pn", label: "ES P/N" },
     { key: "mfr", label: "Mfr / MPN" },
     { key: "pkg_case", label: "Package" },
     { key: "stock_total", label: "Stock" },
     { key: "price", label: "Price" },
   ];
+
+  function columnsForCategory() {
+    const facetKeys = Object.keys(state.categoryData.facets);
+    const specCols = facetKeys.map((key) => ({ key, label: key, spec: true }));
+    return BASE_COLUMNS.concat(specCols);
+  }
 
   async function fetchJSON(path) {
     const res = await fetch(path);
@@ -89,13 +101,18 @@
   async function selectCategory(slug) {
     state.slug = slug;
     state.activeFilters = {};
+    state.sortKey = "es_pn";
+    state.sortDir = 1;
     renderCategoryTree();
 
+    els.thead.innerHTML = "";
     els.tbody.innerHTML = "";
     els.summary.textContent = "";
     els.filters.innerHTML = '<div class="loading-state">Loading…</div>';
 
     state.categoryData = await fetchJSON(`data/${slug}.json`);
+    state.columns = columnsForCategory();
+    renderTableHead();
     renderFilters();
     renderResults();
   }
@@ -253,10 +270,30 @@
     minInput.addEventListener("change", applyNarrow);
     maxInput.addEventListener("change", applyNarrow);
 
+    const selectBtn = document.createElement("button");
+    selectBtn.type = "button";
+    selectBtn.className = "facet-range-select";
+    selectBtn.textContent = "Select";
+    selectBtn.title = "Tick every value in this range";
+    selectBtn.addEventListener("click", () => {
+      const lo = minInput.value === "" ? facet.min : parseFloat(minInput.value);
+      const hi = maxInput.value === "" ? facet.max : parseFloat(maxInput.value);
+      if (Number.isNaN(lo) || Number.isNaN(hi)) return;
+      for (const { raw, value } of facet.values) {
+        if (value >= lo && value <= hi) rf.selected.add(raw);
+      }
+      const next = { selected: rf.selected, narrow: null };
+      if (next.selected.size === 0) delete state.activeFilters[key];
+      else state.activeFilters[key] = next;
+      renderFilters();
+      renderResults();
+    });
+
     rangeRow.appendChild(minInput);
     rangeRow.appendChild(dash);
     rangeRow.appendChild(maxInput);
     rangeRow.appendChild(unit);
+    rangeRow.appendChild(selectBtn);
     wrap.appendChild(rangeRow);
 
     const list = document.createElement("div");
@@ -366,8 +403,8 @@
   function sortParts(parts) {
     const { sortKey, sortDir } = state;
     return [...parts].sort((a, b) => {
-      let av = a[sortKey];
-      let bv = b[sortKey];
+      let av = sortValue(a, sortKey);
+      let bv = sortValue(b, sortKey);
       if (typeof av === "string") av = av.toLowerCase();
       if (typeof bv === "string") bv = bv.toLowerCase();
       if (av == null) av = sortDir > 0 ? Infinity : -Infinity;
@@ -376,6 +413,16 @@
       if (av > bv) return sortDir;
       return 0;
     });
+  }
+
+  // Base columns sort on the top-level field; spec/facet columns sort
+  // numerically when the value was parsed (specs_parsed), otherwise fall
+  // back to the raw string from specs.
+  function sortValue(part, key) {
+    if (key in part) return part[key];
+    const parsed = part.specs_parsed[key];
+    if (parsed) return parsed.value;
+    return part.specs[key];
   }
 
   function renderResults() {
@@ -407,13 +454,61 @@
   function renderRow(p) {
     const tr = document.createElement("tr");
     const cls = stockClass(p.stock_total);
-    tr.innerHTML = `
-      <td><span class="pn">${escapeHTML(p.es_pn)}</span></td>
-      <td>${escapeHTML(p.mpn || "—")}<span class="mfr">${escapeHTML(p.mfr || "")}</span></td>
-      <td class="mono-num">${escapeHTML(p.pkg_case || "—")}</td>
-      <td><span class="stock-pill ${cls}">${p.stock_total.toLocaleString()}</span></td>
-      <td class="mono-num">${fmtPrice(p.price)}</td>
-    `;
+
+    for (const col of state.columns) {
+      const td = document.createElement("td");
+      switch (col.key) {
+        case "pkg_thumb": {
+          td.className = "pkg-cell";
+          if (p.pkg_thumb) {
+            const img = document.createElement("img");
+            img.className = "pkg-thumb-img";
+            img.src = `pkg-thumb/${encodeURIComponent(p.pkg_thumb)}`;
+            img.alt = p.pkg_case || "";
+            img.loading = "lazy";
+            td.appendChild(img);
+          }
+          break;
+        }
+        case "es_pn": {
+          const span = document.createElement("span");
+          span.className = "pn";
+          span.textContent = p.es_pn;
+          td.appendChild(span);
+          break;
+        }
+        case "mfr": {
+          td.textContent = p.mpn || "—";
+          const mfr = document.createElement("span");
+          mfr.className = "mfr";
+          mfr.textContent = p.mfr || "";
+          td.appendChild(mfr);
+          break;
+        }
+        case "pkg_case": {
+          td.className = "mono-num";
+          td.textContent = p.pkg_case || "—";
+          break;
+        }
+        case "stock_total": {
+          const pill = document.createElement("span");
+          pill.className = `stock-pill ${cls}`;
+          pill.textContent = p.stock_total.toLocaleString();
+          td.appendChild(pill);
+          break;
+        }
+        case "price": {
+          td.className = "mono-num";
+          td.textContent = fmtPrice(p.price);
+          break;
+        }
+        default: {
+          td.className = "mono-num";
+          td.textContent = p.specs[col.key] ?? "—";
+        }
+      }
+      tr.appendChild(td);
+    }
     return tr;
   }
 
@@ -423,25 +518,30 @@
     return div.innerHTML;
   }
 
-  // ---------- Sort header wiring ----------
+  // ---------- Table header ----------
 
-  function wireSortHeaders() {
-    document.querySelectorAll("th[data-sort]").forEach((th) => {
+  function renderTableHead() {
+    const tr = document.createElement("tr");
+    for (const col of state.columns) {
+      const th = document.createElement("th");
+      th.textContent = col.label;
+      th.dataset.sort = col.key;
+      if (col.key === state.sortKey) th.classList.add("sorted");
       th.addEventListener("click", () => {
-        const key = th.dataset.sort;
-        if (state.sortKey === key) state.sortDir *= -1;
+        if (state.sortKey === col.key) state.sortDir *= -1;
         else {
-          state.sortKey = key;
+          state.sortKey = col.key;
           state.sortDir = 1;
         }
-        document.querySelectorAll("th[data-sort]").forEach((h) => h.classList.remove("sorted"));
-        th.classList.add("sorted");
+        renderTableHead();
         renderResults();
       });
-    });
+      tr.appendChild(th);
+    }
+    els.thead.innerHTML = "";
+    els.thead.appendChild(tr);
   }
 
-  wireSortHeaders();
   init().catch((err) => {
     els.summary.textContent = "Failed to load parts data.";
     console.error(err);

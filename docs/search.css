@@ -190,7 +190,8 @@ header.topbar {
 .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 8px; }
 
 table.results {
-  width: 100%;
+  width: max-content;
+  min-width: 100%;
   border-collapse: collapse;
   font-size: 0.8rem;
   background: var(--bg-raised);
@@ -242,6 +243,17 @@ table.results tr:hover td { background: var(--bg-sunken); }
 .stock-pill.low { background: var(--amber-soft); color: var(--amber); }
 .stock-pill.out { background: var(--red-soft); color: var(--red); }
 .stock-pill::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+.pkg-cell { width: 52px; padding: 0.3rem 0.5rem; }
+.pkg-thumb-img {
+  display: block;
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
 
 .empty-state, .loading-state {
   padding: 3rem 1rem;
@@ -309,6 +321,20 @@ table.results tr:hover td { background: var(--bg-sunken); }
   padding: 0.3rem 0.4rem;
 }
 .facet-range-unit { font-size: 0.72rem; color: var(--ink-faint); font-family: 'JetBrains Mono', ui-monospace, monospace; }
+
+.facet-range-select {
+  flex-shrink: 0;
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--accent-ink);
+  background: var(--accent-soft);
+  border: 1px solid var(--accent);
+  border-radius: 5px;
+  padding: 0.3rem 0.5rem;
+  cursor: pointer;
+}
+.facet-range-select:hover { filter: brightness(1.08); }
 
 .clear-filters {
   font-size: 0.76rem;
