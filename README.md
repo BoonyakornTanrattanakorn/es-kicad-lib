@@ -48,7 +48,7 @@ prefix in the symbol/footprint choosers.
 
 `docs/` is a static, client-side parts search over the same catalogue,
 served via GitHub Pages at
-`https://boonyakorntanrattanakorn.github.io/es-kicad-lib/`. DigiKey-style
+[Parts Searcher](https://boonyakorntanrattanakorn.github.io/es-kicad-lib/). DigiKey-style
 three-pane layout: category tree, results table, and faceted filters
 built from each part's parametric spec table. Categorical specs
 (Package/Case, Dielectric, ...) get a plain checkbox list; numeric specs
