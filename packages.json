@@ -20,6 +20,15 @@
             },
             "versions": [
                 {
+                    "version": "2026.08.10",
+                    "status": "stable",
+                    "kicad_version": "8.0",
+                    "download_url": "https://github.com/BoonyakornTanrattanakorn/es-kicad-lib/releases/download/v2026.08.10/es-kicad-lib-2026.08.10.zip",
+                    "download_sha256": "9524380a8c839a1d26ef807dbb12a4e54d23ff1e88392b10e2e71efc5d08065b",
+                    "download_size": 578517,
+                    "install_size": 25324798
+                },
+                {
                     "version": "2026.08.09",
                     "status": "stable",
                     "kicad_version": "8.0",
